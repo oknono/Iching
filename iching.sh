@@ -18,6 +18,25 @@ echo ""
 # Faking the input for now, to see what it looks like on console
 # Implement the coin toss and lines later
 
+# Coin Toss
+# ----------
+# Coin value is $RANDOM % 2. Determines if random number is ODD (1) or EVEN (0)
+# function ()
+# number = $RANDOM % 2
+# return number
+
+# For me ODD is YING  and EVEN is YANG
+# Coin1 = 0
+# Coin2 = 1
+# Coin3 = 0
+
+# Concatentate values of three coins into a line, e.g. 010
+# Convert this number into a line, e.g. "  --  " (2 * space, 2 * -, 2* space)
+# function(x)
+# if x == "O"
+#    return "  "
+# else retun "--"
+
 LINE1="------"
 LINE2="--  --"
 LINE3="--    "
