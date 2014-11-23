@@ -1,15 +1,153 @@
+# -*- coding: utf-8 -*- 
+
 # I-ching first setup
 # Last edited: 3 nov 2014
 # By kirsten - oknono@github - kirsten@eml.cc
 
-# Ask user to throw three coins
-# Coin Toss by pressing enter. 
-# After 3 enter don't read input anymore
+# Simulate 3 coin tosses to create a line
 
 # After three tosses, draw line and ask for three more. Repeat until we have 6 lines
 
-# Show the hexagram by drawing line 6 on top and line 1 on bottom
+# A line is a 0 or 1. Unbroken : 1; Broken: 0. Translate binary into ascii
 
-# Show number of Hexagram
+# Show the hexagram by drawing line 6 on top and line 1 on bottom, (flip string and use drawing function)
 
-# Provide link to text or get text from a website (open source text)N
+# Create a dictionary to link a pattern to a hexagram number(64 items)
+hexa_lines = {
+	000000 : 2,
+	000001 : 23,
+	000010 : 8,
+	000011 : 20,
+	000100 : 16,
+	000101 : 35,
+	000110 : 45,
+	000111 : 12,
+	001000 : 15,
+	001001 : 52,
+	001010 : 39,
+	001011 : 53,
+	001100 : 62,
+	001101 : 56,
+	001110 : 31,
+	001111 : 33,
+	010000 : 7,
+	010001 : 4,
+	010010 : 29,
+	010011 : 59,
+	010100 : 40,
+	010101 : 64,
+	010110 : 47,
+	010111 : 6,
+	011000 : 46,
+	011001 : 18,
+	011010 : 48,
+	011011 : 57,
+	011100 : 32,
+	011101 : 50,
+	011110 : 28,
+	011111 : 44,
+	100000 : 24,
+	100001 : 27,
+	100010 : 3,
+	100011 : 42,
+	100100 : 51,
+	100101 : 21,
+	100110 : 17,
+	100111 : 25,
+	101000 : 36,
+	101001 : 22,
+	101010 : 63,
+	101011 : 37,
+	101100 : 55,
+	101101 : 30,
+	101110 : 49,
+	101111 : 13,
+	110000 : 19,
+	110001 : 41,
+	110010 : 60,
+	110011 : 61,
+	110100 : 54,
+	110101 : 38,
+	110110 : 58,
+	110111 : 10,
+	111000 : 11,
+	111001 : 26,
+	111010 : 5,
+	111011 : 9,
+	111100 : 34,
+	111101 : 14,
+	111110 : 43,
+	111111 : 1
+	}
+# names taken from wikipedia -- add URL!
+hexa_names = {
+	1 : "乾 (qián), \"Force\"",
+	2 : "坤 (kūn), \"Field\"",
+	3 : "屯 (zhūn), \"Sprouting\"",
+	4 : "蒙 (méng), \"Enveloping\"",
+	5 : "需 (xū), \"Attending\"",
+	6 : "訟 (sòng), \"Arguing\"",
+	7 : "師 (shī), \"Leading\"",
+	8 : "比 (bǐ), \"Grouping\"",
+	9 : "小畜 (xiǎo chù), \"Small Accumulating\"",
+	10 : "履 (lǚ), \"Treading\"", 
+	11 : "泰 (tài), \"Pervading\"",
+	12 : "否 (pǐ), \"Obstruction\"",
+	13 : "同人 (tóng rén), \"Concording People\"",
+	14 : "大有 (dà yǒu), \"Great Possessing\"",
+	15 : "謙 (qiān), \"Humbling\"",
+	16 : "豫 (yù), \"Providing-For\"",
+	17 : "隨 (suí), \"Following\"",
+	18 : "蠱 (gŭ), \"Correcting\"",
+	19 : "臨 (lín), \"Nearing\"",
+	20 : "觀 (guān), \"Viewing\"",
+	21 : "噬嗑 (shì kè), \"Gnawing Bite\"",
+	22 : "賁 (bì), \"Adorning\"",
+	23 : "剝 (bō), \"Stripping\"",
+	24 : "復 (fù), \"Returning\"",
+	25 : "無妄 (wú wàng), \"Without Embroiling\"",
+	26 : "大畜 (dà chù), \"Great Accumulating\"",
+	27 : "頤 (yí), \"Swallowing\"",
+	28 : "大過 (dà guò), \"Great Exceeding\"",
+	29 : "坎 (kǎn), \"Gorge\"",
+	30 : "離 (lí), \"Radiance\"",
+	31 : "咸 (xián), \"Conjoining\"",
+	32 : "恆 (héng), \"Persevering\"",
+	33 : "遯 (dùn), \"Retiring\"",
+	34 : "大壯 (dà zhuàng), \"Great Invigorating\"",
+	35 : "晉 (jìn), \"Prospering\"",
+	36 : "明夷 (míng yí), \"Darkening of the Light.\"",
+	37 : "家人 (jiā rén), \"Dwelling People\"",
+	38 : "睽 (kuí), \"Polarising\"",
+	39 : "蹇 (jiǎn), \"Limping\"",
+	40 : "解 (xiè), \"Taking-Apart\"",
+	41 : "損 (sǔn), \"Diminishing\"",
+	42 : "益 (yì), \"Augmenting\"",
+	43 : "夬 (guài), \"Displacement\"",
+	44 : "姤 (gòu), \"Coupling\"",
+	45 : "萃 (cuì), \"Clustering\"",
+	46 : "升 (shēng), \"Ascending\"",
+	47 : "困 (kùn), \"Confining\"",
+	48 : "井 (jǐng), \"Welling\"",
+	49 : "革 (gé), \"Skinning\"",
+	50 : "鼎 (dǐng), \"Holding\"",
+	51 : "震 (zhèn), \"Shake\"",
+	52 : "艮 (gèn), \"Bound\"",
+	53 : "漸 (jiàn), \"Infiltrating\"",
+	54 : "歸妹 (guī mèi), \"Converting the Maiden\"",
+	55 : "豐 (fēng), \"Abounding\"",
+	56 : "旅 (lǚ), \"Sojourning\"",
+	57 : "巽 (xùn), \"Ground\"",
+	58 : "兌 (duì), \"Open\"",
+	59 : "渙 (huàn), \"Dispersing\"",
+	60 : "節 (jié), \"Articulating\"",
+	61 : "中孚 (zhōng fú), \"Center Returning\"",
+	62 : "小過 (xiǎo guò), \"Small Exceeding\"",
+	63 : "既濟 (jì jì), \"Already Fording\"",
+	64 : "未濟 (wèi jì), \"Not Yet Fording\""
+	}
+	
+# Get a free online resource for the I-ching, where I can plug in the Hexagram number in a URL
+
+print hexa_lines[0] 
+print hexa_names[0]
